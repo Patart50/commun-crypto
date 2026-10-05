@@ -21,4 +21,11 @@ La configuration de Vite est chargée par Node, qui ne retire pas les types Type
 Les chemins sont écrits une fois, en générateur (`eurRoute`), utilisable avec une table déjà chargée (`priceEur`) ou des cours obtenus à la demande (`priceEurAsync`). Ordre de pmpa D-026 : EUR ; USD → 1 ÷ EURUSDT ; XEUR ; XUSDT ÷ EURUSDT ; XUSDC × USDCUSDT ÷ EURUSDT ; XBTC × BTCEUR. Écart minime avec l'ancienne copie de renfort pour l'USD (paire directe essayée avant), sans effet pratique.
 
 ## D-007 ✅ Versions
-Semver. Ajout compatible → mineure ; changement d'API → majeure. Les tags sont posés par Arnaud. Chaque outil monte de version par une PR, sans être entraîné malgré lui. Le Short des formules de renfort, nécessaire à carnet-crypto, arrivera dans une version mineure avec ses tests.
+Semver. Ajout compatible → mineure ; changement d'API → majeure. Les tags sont posés par Arnaud. Chaque outil monte de version par une PR, sans être entraîné malgré lui. Le Short des formules de renfort, nécessaire à carnet-crypto, arrive dans une version mineure avec ses tests (D-008).
+
+## D-008 ✅ Formules de renfort en Long et en Short (v1.1)
+Pour le simulateur de carnet-crypto (carnet D-008). Une position est vue à travers son prix effectif d'entrée, frais compris : Long P ÷ (1 − f), Short P × (1 − f) (on encaisse moins). Nouveau PMP = (Q·PMP + q·Pe) ÷ (Q + q) dans les deux sens ; quantité pour atteindre Y : q = Q(PMP − Y) ÷ (Y − Pe), cible sous le PMP en Long, au-dessus en Short ; prix limite Y(1 − f) en Long, Y ÷ (1 − f) en Short. Frais de sortie en fraction du montant : break-even PMP ÷ (1 − f_v) en Long, PMP ÷ (1 + f_v) en Short (le rachat coûte plus cher). Choc défavorable : baisse en Long, hausse en Short. Les fonctions en montant de la 1.0 restent inchangées ; un test vérifie qu'en Long les deux approches coïncident. Frais nuls = PMP brut (carnet D-003).
+
+## D-009 ✅ URL HTTPS dans package.json
+Les outils déclarent `"commun-crypto": "git+https://github.com/Patart50/commun-crypto.git#vX.Y.Z"`. npm inscrit quand même `git+ssh` dans le lockfile, mais télécharge l'archive en HTTPS (vérifié sans clé SSH, en local et sur la CI de renfort-crypto).
+

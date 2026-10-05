@@ -1,5 +1,9 @@
 # Notes de version
 
+## 1.1.0 — Long et Short
+
+- `renfort` : formules pour les deux sens (commun D-008) : `effectivePrice`, `addQuantity`, `quantityForTarget`, `limitPriceFor`, `breakEvenFor`, `latentGainFor`, `exposureFor`, type `Side`. En Long, elles redonnent exactement les formules en montant de la 1.0, inchangées.
+
 ## 1.0.0 — 5 octobre 2026
 
 Première version : extraction du code commun de pmpa-crypto, dca-crypto et renfort-crypto (commun D-001 à D-007).

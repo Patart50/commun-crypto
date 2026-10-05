@@ -12,7 +12,7 @@ service worker hors ligne, auteur et soutien. Choix et conventions : [docs/DECIS
 Dans un outil du programme (dépendance git épinglée par tag, commun D-001) :
 
 ```sh
-npm install github:Patart50/commun-crypto#v1.0.0
+npm install git+https://github.com/Patart50/commun-crypto.git#v1.1.0
 ```
 
 Le paquet livre ses sources TypeScript et Svelte : l'outil doit utiliser Vite, `@sveltejs/vite-plugin-svelte` et Svelte 5.
@@ -29,7 +29,7 @@ Le paquet livre ses sources TypeScript et Svelte : l'outil doit utiliser Vite, `
 | `commun-crypto/binance` | `fetchTicker`, `loadTicker`, `priceEur`, `priceEurAsync`, `eurRoute`, `roundPrice` |
 | `commun-crypto/support` | `AUTHOR`, `SPONSORS_URL`, `DONATION_ADDRESSES` |
 | `commun-crypto/theme` | `Theme`, `applyTheme`, `nextTheme`, `isTheme` |
-| `commun-crypto/renfort` | formules de renfort-crypto |
+| `commun-crypto/renfort` | formules de renfort-crypto ; en Long et en Short depuis la 1.1 (`addQuantity`, `quantityForTarget`, `breakEvenFor`…) |
 | `commun-crypto/theme.css` | thème commun, polices locales |
 | `commun-crypto/ui/Support.svelte` | `<Support intro="…" />` |
 | `commun-crypto/ui/ThemeToggle.svelte` | `<ThemeToggle theme={…} onchange={…} />` |

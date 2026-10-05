@@ -1,6 +1,6 @@
 {
   "name": "commun-crypto",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Code commun des outils crypto open source du programme Patart50 : arithmétique décimale, CSV, prix Binance, formatage, stockage, thème, service worker, auteur et soutien.",
   "license": "AGPL-3.0-only",
   "author": "Arnaud (Patart50) (https://github.com/Patart50)",
