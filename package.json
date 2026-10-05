@@ -1,0 +1,55 @@
+{
+  "name": "commun-crypto",
+  "version": "1.0.0",
+  "description": "Code commun des outils crypto open source du programme Patart50 : arithmétique décimale, CSV, prix Binance, formatage, stockage, thème, service worker, auteur et soutien.",
+  "license": "AGPL-3.0-only",
+  "author": "Arnaud (Patart50) (https://github.com/Patart50)",
+  "repository": { "type": "git", "url": "git+https://github.com/Patart50/commun-crypto.git" },
+  "type": "module",
+  "sideEffects": ["**/*.css"],
+  "files": ["src", "!src/**/*.test.ts", "LICENSE", "README.md"],
+  "exports": {
+    "./money": { "types": "./src/money.ts", "default": "./src/money.ts" },
+    "./format": { "types": "./src/format.ts", "default": "./src/format.ts" },
+    "./parse": { "types": "./src/parse.ts", "default": "./src/parse.ts" },
+    "./csv": { "types": "./src/csv.ts", "default": "./src/csv.ts" },
+    "./storage": { "types": "./src/storage.ts", "default": "./src/storage.ts" },
+    "./binance": { "types": "./src/binance.ts", "default": "./src/binance.ts" },
+    "./support": { "types": "./src/support.ts", "default": "./src/support.ts" },
+    "./theme": { "types": "./src/theme.ts", "default": "./src/theme.ts" },
+    "./renfort": { "types": "./src/renfort.ts", "default": "./src/renfort.ts" },
+    "./theme.css": "./src/theme.css",
+    "./ui/Support.svelte": { "types": "./src/ui/Support.svelte", "svelte": "./src/ui/Support.svelte", "default": "./src/ui/Support.svelte" },
+    "./ui/ThemeToggle.svelte": { "types": "./src/ui/ThemeToggle.svelte", "svelte": "./src/ui/ThemeToggle.svelte", "default": "./src/ui/ThemeToggle.svelte" },
+    "./vite": { "types": "./src/vite/offline-sw.d.ts", "default": "./src/vite/offline-sw.js" }
+  },
+  "scripts": {
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fontsource-variable/public-sans": "^5.3.0",
+    "@fontsource-variable/source-serif-4": "^5.3.0",
+    "decimal.js": "^10.6.0",
+    "qrcode": "^1.5.4"
+  },
+  "peerDependencies": {
+    "svelte": "^5.0.0",
+    "vite": ">=7"
+  },
+  "peerDependenciesMeta": {
+    "vite": { "optional": true }
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
+    "@tsconfig/svelte": "^5.0.8",
+    "@types/node": "^24.19.1",
+    "@types/qrcode": "^1.5.6",
+    "svelte": "^5.57.1",
+    "svelte-check": "^4.7.6",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  }
+}
