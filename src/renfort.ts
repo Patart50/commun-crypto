@@ -237,3 +237,140 @@ export function targetCurve(p: Position, target: Dec, buyFee: Dec, from: Dec, st
 export function amountToInvest(amount: Dec): Dec {
   return amount.toDecimalPlaces(2, D.ROUND_UP);
 }
+
+/* ------------------------------------------------------------------------ *
+ * Long et Short (v1.1, carnet D-008)
+ *
+ * Une position est vue à travers son prix effectif d'entrée, frais compris :
+ * - Long : on paie le prix plus les frais, prix effectif = P ÷ (1 − f) ;
+ * - Short : on encaisse le prix moins les frais, prix effectif = P × (1 − f).
+ * Le nouveau PMP est alors, dans les deux sens, la moyenne pondérée
+ * (Q × PMP + q × Pe) ÷ (Q + q), et la quantité à ajouter pour atteindre Y vaut
+ * q = Q × (PMP − Y) ÷ (Y − Pe). En Long la cible est sous le PMP, en Short
+ * au-dessus ; seuls les sens d'inégalité changent.
+ * Frais de sortie (fermeture) en fraction du montant : Long, produit net
+ * q × B × (1 − f_v) ; Short, coût du rachat q × B × (1 + f_v).
+ * Avec des frais nuls, ces fonctions donnent le PMP brut.
+ * ------------------------------------------------------------------------ */
+
+export type Side = 'long' | 'short';
+
+/** +1 pour Long, −1 pour Short. */
+export function sideSign(side: Side): 1 | -1 {
+  return side === 'long' ? 1 : -1;
+}
+
+/** Prix effectif d'entrée, frais compris. */
+export function effectivePrice(side: Side, price: Dec, entryFee: Dec): Dec {
+  checkRate(entryFee, "Frais d'entrée");
+  checkPositive(price, "Prix d'entrée");
+  const one = new D(1);
+  return side === 'long' ? price.div(one.minus(entryFee)) : price.mul(one.minus(entryFee));
+}
+
+export interface AddResult {
+  side: Side;
+  quantityAdded: Dec;
+  price: Dec;
+  /** Prix effectif de l'ajout, frais compris. */
+  effectivePrice: Dec;
+  /** Montant de l'ajout au prix d'exécution (quantité × prix). */
+  notional: Dec;
+  /** Frais de l'ajout. */
+  fees: Dec;
+  before: Position;
+  after: Position;
+  /** L'ajout dégrade le PMP : il monte en Long, baisse en Short. */
+  worsensPmp: boolean;
+}
+
+/** Ajout d'une quantité q au prix P, en Long ou en Short. */
+export function addQuantity(side: Side, before: Position, quantity: Dec, price: Dec, entryFee: Dec): AddResult {
+  if (quantity.isNeg()) throw new RangeError(`Quantité négative : ${quantity.toString()}`);
+  const pe = effectivePrice(side, price, entryFee);
+  const total = before.quantity.plus(quantity);
+  const pmp = total.isZero() ? ZERO : before.quantity.mul(before.pmp).plus(quantity.mul(pe)).div(total);
+  const notional = quantity.mul(price);
+  const fees = side === 'long' ? quantity.mul(pe).minus(notional) : notional.minus(quantity.mul(pe));
+  return {
+    side,
+    quantityAdded: quantity,
+    price,
+    effectivePrice: pe,
+    notional,
+    fees,
+    before,
+    after: { quantity: total, pmp },
+    worsensPmp: side === 'long' ? pmp.gt(before.pmp) : pmp.lt(before.pmp),
+  };
+}
+
+/** Prix d'exécution limite pour atteindre Y : Long, Y × (1 − f) ; Short, Y ÷ (1 − f). */
+export function limitPriceFor(side: Side, target: Dec, entryFee: Dec): Dec {
+  checkRate(entryFee, "Frais d'entrée");
+  const one = new D(1);
+  return side === 'long' ? target.mul(one.minus(entryFee)) : target.div(one.minus(entryFee));
+}
+
+export type QuantityTargetResult =
+  | { status: 'ok'; quantity: Dec; add: AddResult; limitPrice: Dec }
+  /** Cible déjà atteinte : PMP ≤ Y en Long, PMP ≥ Y en Short. */
+  | { status: 'reached' }
+  /** Prix au-delà de la limite : aucune quantité ne suffit. */
+  | { status: 'unreachable'; limitPrice: Dec }
+  | { status: 'no-position' };
+
+/** Quantité à ajouter au prix P pour amener le PMP à Y : q = Q × (PMP − Y) ÷ (Y − Pe). */
+export function quantityForTarget(side: Side, p: Position, target: Dec, price: Dec, entryFee: Dec): QuantityTargetResult {
+  checkPositive(target, 'PMP cible');
+  checkPositive(price, "Prix d'entrée");
+  if (!p.quantity.gt(0) || !p.pmp.gt(0)) return { status: 'no-position' };
+  const s = sideSign(side);
+  if (target.minus(p.pmp).mul(s).gte(0)) return { status: 'reached' };
+  const limit = limitPriceFor(side, target, entryFee);
+  const pe = effectivePrice(side, price, entryFee);
+  // Long : il faut Pe < Y ; Short : Pe > Y.
+  if (target.minus(pe).mul(s).lte(0)) return { status: 'unreachable', limitPrice: limit };
+  const quantity = p.quantity.mul(p.pmp.minus(target)).div(target.minus(pe));
+  return { status: 'ok', quantity, add: addQuantity(side, p, quantity, price, entryFee), limitPrice: limit };
+}
+
+/** Prix de sortie qui annule le résultat, frais de sortie compris : Long PMP ÷ (1 − f_v), Short PMP ÷ (1 + f_v). */
+export function breakEvenFor(side: Side, pmp: Dec, exitFee: Dec): Dec {
+  checkRate(exitFee, 'Frais de sortie');
+  const one = new D(1);
+  return side === 'long' ? pmp.div(one.minus(exitFee)) : pmp.div(one.plus(exitFee));
+}
+
+/** Résultat latent d'une fermeture totale au cours donné, frais de sortie compris. */
+export function latentGainFor(side: Side, p: Position, price: Dec, exitFee: Dec): Dec {
+  checkRate(exitFee, 'Frais de sortie');
+  const one = new D(1);
+  return side === 'long'
+    ? p.quantity.mul(price).mul(one.minus(exitFee)).minus(cost(p))
+    : cost(p).minus(p.quantity.mul(price).mul(one.plus(exitFee)));
+}
+
+export interface SideExposure {
+  /** Montant engagé : Q × PMP. */
+  engaged: Dec;
+  /** Résultat latent après un choc défavorable (baisse en Long, hausse en Short). */
+  gainAfterShock: Dec;
+  /** Variation du cours nécessaire pour atteindre le break-even (positive : hausse). */
+  moveToBreakEven: Dec;
+  breakEven: Dec;
+}
+
+/** Exposition au prix de référence, avec un choc défavorable de `shock` (20 % par défaut). */
+export function exposureFor(side: Side, p: Position, price: Dec, exitFee: Dec, shock: Dec = new D('0.2')): SideExposure {
+  checkPositive(price, 'Prix de référence');
+  checkRate(shock, 'Choc simulé');
+  const shocked = price.mul(new D(1).plus(shock.mul(-sideSign(side))));
+  const breakEven = breakEvenFor(side, p.pmp, exitFee);
+  return {
+    engaged: cost(p),
+    gainAfterShock: latentGainFor(side, p, shocked, exitFee),
+    moveToBreakEven: breakEven.div(price).minus(1),
+    breakEven,
+  };
+}
