@@ -1,5 +1,9 @@
 # Notes de version
 
+## 1.2.0 — Cours à la minute
+
+- `klines` : `MinuteKlines` (cours de clôture de la bougie d'une minute, liste des paires chargée une fois, cache, paires inconnues jamais interrogées) et `parisToUtcMs`, repris de pmpa-crypto (commun D-010). Se combine avec `priceEurAsync`.
+
 ## 1.1.0 — Long et Short
 
 - `renfort` : formules pour les deux sens (commun D-008) : `effectivePrice`, `addQuantity`, `quantityForTarget`, `limitPriceFor`, `breakEvenFor`, `latentGainFor`, `exposureFor`, type `Side`. En Long, elles redonnent exactement les formules en montant de la 1.0, inchangées.
