@@ -29,3 +29,6 @@ Pour le simulateur de carnet-crypto (carnet D-008). Une position est vue à trav
 ## D-009 ✅ URL HTTPS dans package.json
 Les outils déclarent `"commun-crypto": "git+https://github.com/Patart50/commun-crypto.git#vX.Y.Z"`. npm inscrit quand même `git+ssh` dans le lockfile, mais télécharge l'archive en HTTPS (vérifié sans clé SSH, en local et sur la CI de renfort-crypto).
 
+## D-010 ✅ Cours historiques à la minute (v1.2)
+Pour le bouton « Cours à cette date » de carnet-crypto, et la future migration de pmpa-crypto : `MinuteKlines` reprend la lecture des bougies d'une minute de pmpa (D-026, D-028) : clôture de la bougie contenant l'instant, au-delà d'une heure d'écart la bougie est ignorée, liste des paires chargée une fois par la liste publique des cours (une paire inconnue n'est jamais interrogée), cache par paire et minute, compteur d'échecs. L'instant est passé en UTC ; `parisToUtcMs` convertit une heure de Paris (pmpa). Ajout compatible.
+

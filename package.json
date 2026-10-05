@@ -1,27 +1,79 @@
 {
   "name": "commun-crypto",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Code commun des outils crypto open source du programme Patart50 : arithmétique décimale, CSV, prix Binance, formatage, stockage, thème, service worker, auteur et soutien.",
   "license": "AGPL-3.0-only",
   "author": "Arnaud (Patart50) (https://github.com/Patart50)",
-  "repository": { "type": "git", "url": "git+https://github.com/Patart50/commun-crypto.git" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Patart50/commun-crypto.git"
+  },
   "type": "module",
-  "sideEffects": ["**/*.css"],
-  "files": ["src", "!src/**/*.test.ts", "LICENSE", "README.md"],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "src",
+    "!src/**/*.test.ts",
+    "LICENSE",
+    "README.md"
+  ],
   "exports": {
-    "./money": { "types": "./src/money.ts", "default": "./src/money.ts" },
-    "./format": { "types": "./src/format.ts", "default": "./src/format.ts" },
-    "./parse": { "types": "./src/parse.ts", "default": "./src/parse.ts" },
-    "./csv": { "types": "./src/csv.ts", "default": "./src/csv.ts" },
-    "./storage": { "types": "./src/storage.ts", "default": "./src/storage.ts" },
-    "./binance": { "types": "./src/binance.ts", "default": "./src/binance.ts" },
-    "./support": { "types": "./src/support.ts", "default": "./src/support.ts" },
-    "./theme": { "types": "./src/theme.ts", "default": "./src/theme.ts" },
-    "./renfort": { "types": "./src/renfort.ts", "default": "./src/renfort.ts" },
+    "./money": {
+      "types": "./src/money.ts",
+      "default": "./src/money.ts"
+    },
+    "./format": {
+      "types": "./src/format.ts",
+      "default": "./src/format.ts"
+    },
+    "./parse": {
+      "types": "./src/parse.ts",
+      "default": "./src/parse.ts"
+    },
+    "./csv": {
+      "types": "./src/csv.ts",
+      "default": "./src/csv.ts"
+    },
+    "./storage": {
+      "types": "./src/storage.ts",
+      "default": "./src/storage.ts"
+    },
+    "./binance": {
+      "types": "./src/binance.ts",
+      "default": "./src/binance.ts"
+    },
+    "./klines": {
+      "types": "./src/klines.ts",
+      "default": "./src/klines.ts"
+    },
+    "./support": {
+      "types": "./src/support.ts",
+      "default": "./src/support.ts"
+    },
+    "./theme": {
+      "types": "./src/theme.ts",
+      "default": "./src/theme.ts"
+    },
+    "./renfort": {
+      "types": "./src/renfort.ts",
+      "default": "./src/renfort.ts"
+    },
     "./theme.css": "./src/theme.css",
-    "./ui/Support.svelte": { "types": "./src/ui/Support.svelte", "svelte": "./src/ui/Support.svelte", "default": "./src/ui/Support.svelte" },
-    "./ui/ThemeToggle.svelte": { "types": "./src/ui/ThemeToggle.svelte", "svelte": "./src/ui/ThemeToggle.svelte", "default": "./src/ui/ThemeToggle.svelte" },
-    "./vite": { "types": "./src/vite/offline-sw.d.ts", "default": "./src/vite/offline-sw.js" }
+    "./ui/Support.svelte": {
+      "types": "./src/ui/Support.svelte",
+      "svelte": "./src/ui/Support.svelte",
+      "default": "./src/ui/Support.svelte"
+    },
+    "./ui/ThemeToggle.svelte": {
+      "types": "./src/ui/ThemeToggle.svelte",
+      "svelte": "./src/ui/ThemeToggle.svelte",
+      "default": "./src/ui/ThemeToggle.svelte"
+    },
+    "./vite": {
+      "types": "./src/vite/offline-sw.d.ts",
+      "default": "./src/vite/offline-sw.js"
+    }
   },
   "scripts": {
     "check": "svelte-check --tsconfig ./tsconfig.json",
@@ -39,7 +91,9 @@
     "vite": ">=7"
   },
   "peerDependenciesMeta": {
-    "vite": { "optional": true }
+    "vite": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.3.1",
