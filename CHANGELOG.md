@@ -1,5 +1,9 @@
 # Notes de version
 
+## 1.3.0 — Euro ou dollar (USDC)
+
+- `currency` : devise d'un scénario, euro ou dollar USDC (commun D-011), repris de renfort-crypto (renfort D-019) : `formatter` (€ / $), `rateText`, `readAmount`, `convert`, `convertAmounts`, `eurUsdcRate` (EURUSDC), `priceUsdc` (XUSDC ; XUSDT ÷ USDCUSDT ; prix en euros × EURUSDC), `priceIn`. Seul changement : `convertAmounts` reçoit la liste des champs (`{ prices, amounts }`) au lieu de ceux de renfort, codés en dur.
+
 ## 1.2.0 — Cours à la minute
 
 - `klines` : `MinuteKlines` (cours de clôture de la bougie d'une minute, liste des paires chargée une fois, cache, paires inconnues jamais interrogées) et `parisToUtcMs`, repris de pmpa-crypto (commun D-010). Se combine avec `priceEurAsync`.

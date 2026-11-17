@@ -26,6 +26,7 @@ Le paquet livre ses sources TypeScript et Svelte : l'outil doit utiliser Vite, `
 | `commun-crypto/format` | `eur`, `eurSigned`, `eurPrice`, `qty`, `pct`, `amount(d, 'USDT')`, `dateFr`, `duration`… |
 | `commun-crypto/csv` | `parseCsv`, `detectDelimiter`, `toCsv`, `csvCell` |
 | `commun-crypto/storage` | `openLocalStore('outil-crypto:')` : lecture, écriture JSON, repli en mémoire |
+| `commun-crypto/currency` | Devise euro ou dollar (USDC) : `formatter`, `rateText`, `readAmount`, `convert`, `convertAmounts`, `eurUsdcRate`, `priceUsdc`, `priceIn` |
 | `commun-crypto/klines` | `MinuteKlines` (cours à la minute), `parisToUtcMs` |
 | `commun-crypto/binance` | `fetchTicker`, `loadTicker`, `priceEur`, `priceEurAsync`, `eurRoute`, `roundPrice` |
 | `commun-crypto/support` | `AUTHOR`, `SPONSORS_URL`, `DONATION_ADDRESSES` |
