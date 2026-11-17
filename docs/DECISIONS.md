@@ -32,3 +32,6 @@ Les outils déclarent `"commun-crypto": "git+https://github.com/Patart50/commun-
 ## D-010 ✅ Cours historiques à la minute (v1.2)
 Pour le bouton « Cours à cette date » de carnet-crypto, et la future migration de pmpa-crypto : `MinuteKlines` reprend la lecture des bougies d'une minute de pmpa (D-026, D-028) : clôture de la bougie contenant l'instant, au-delà d'une heure d'écart la bougie est ignorée, liste des paires chargée une fois par la liste publique des cours (une paire inconnue n'est jamais interrogée), cache par paire et minute, compteur d'échecs. L'instant est passé en UTC ; `parisToUtcMs` convertit une heure de Paris (pmpa). Ajout compatible.
 
+
+## D-011 ✅ Devise euro ou dollar (USDC) (v1.3)
+Pour staking-crypto, où le dollar est la devise par défaut (staking D-014, D-016), et comme prévu dès renfort D-019 : `currency` reprend `src/lib/core/currency.ts` de renfort-crypto (commit 868331f). Le dollar est l'USDC de Binance, assimilé au dollar ; taux EUR/USDC = dernier prix de la paire EURUSDC ; cours en dollars : XUSDC, sinon XUSDT ÷ USDCUSDT, sinon prix en euros (D-006) × EURUSDC. Seul changement d'API par rapport à renfort : `convertAmounts(form, { prices, amounts }, from, to, rate)` reçoit la liste des champs, puisque chaque outil a les siens. renfort-crypto passera sur ce module dans une PR séparée, sans changement de comportement (mêmes tests).
